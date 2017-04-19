@@ -10,7 +10,7 @@
         $(document).ready(function() {
             $('input.targetsystem').typeahead({
                 name: 'targetsystem',
-                remote: 'activecaches.php?query=%QUERY'
+                remote: '../includes/activecaches.php?query=%QUERY'
             });
         })
     </script>
