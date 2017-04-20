@@ -22,7 +22,7 @@ include_once '../includes/head.php';
             $('input.system').typeahead({
                 name: 'system',
                 remote: '../includes/jsystems.php?query=%QUERY',
-				minLength: 3, // send AJAX request only after user type in at least 3 characters
+				minLength: 3, // send AJAX request only after user types in at least 3 characters
 				limit: 8 // limit to show only 8 results
             });
         })
@@ -73,8 +73,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 				$rescuerep = '<a href="https://gate.eveonline.com/Profile/'. $rep_url.'">'.
 							$row['AssignedRep'] .'</a>';
 			}
-			$errmsg = $errmsg . "Duplicate entry detected. There is already an open search request for ". $pilot ." in ". $system ."<br />".
-								"For updated status, please contact ". $rescuerep;
+			$errmsg = $errmsg . "Duplicate entry detected. There is already an open search 
+								 request for ". $pilot ." in ". $system ."<br />For updated 
+								 status, please contact ". $rescuerep;
 		}
 		else {
 			// no duplicate found, so insert to [sar_request] table
@@ -109,149 +110,207 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	<div class="row" id="formtop">
 		<?php include_once '../includes/top-left.php'; ?>
 		<div class="col-sm-8" style="text-align: center;">
-			<span style="font-size: 125%; font-weight: bold; color: white;">Search and Rescue Request</span>
+			<span style="font-size: 125%; font-weight: bold; color: white;">
+			Search and Rescue Request</span><br /><br />
+			<span class="white"><strong>Complete all fields below. If you do not 
+			know an answer or a question does not apply, leave it blank.</strong></span>
 		</div>
 		<?php include_once '../includes/top-right.php'; ?>
 	</div>
 	<div class="ws"></div>
-	<div class="row" id="formtop2">
-		<div class="col-sm-12" style="text-align: center;">
-			<span class="white"><strong>Complete all fields below. If you do not know an answer or a question does not apply, leave it blank.</strong></span>
-		</div>
-	</div>
 	
-	<div class="ws"></div>
 	<?php
 	//display error message div if there is one to show
-	if (!empty($errmsg)):
-	?>
-	<div class="row" id="errormessage" style="background-color: #ff9999;">
-		<div class="col-sm-12 message">
-			<?php echo nl2br($errmsg); ?>
-		</div>
-	</div>
-	<div class="ws"></div>
-	<?php
-	else:
-		//display success message div if there is one to show
-		if (!empty($successurl)):
-		?>
-		<div class="row" id="successmessage" style="background-color: #ccffcc;">
+	if (!empty($errmsg)): ?>
+		<div class="row" id="errormessage" style="background-color: #ff9999;">
 			<div class="col-sm-12 message">
-				Request entered successfully! An EvE-Scout Rescue representative will 
-				connect with you via EVEMail within 24 hours. <?php echo $successurl; ?>
+				<?php echo nl2br($errmsg); ?>
 			</div>
 		</div>
 		<div class="ws"></div>
+	<?php
+	else:
+		//display success message div if there is one to show
+		if (!empty($successurl)): ?>
+			<div class="row" id="successmessage" style="background-color: #ccffcc;">
+				<div class="col-sm-12 message">
+					Request entered successfully! An EvE-Scout Rescue representative will 
+					connect with you via EVEMail within 24 hours. <?php echo $successurl; ?>
+				</div>
+			</div>
+			<div class="ws"></div>
 		<?php
 		endif;
 	endif;
 	
 	//hide form after successful entry
-	if (empty($successurl)):
-	?>
-	<div class="row" id="formmain">
-		<form name="esrc" id="sar" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method='post' enctype='multipart/form-data'>
-		<div class="col-sm-12">
-			<div class="row">
-				<div class="sechead sower">Stranded Pilot: <strong><?php echo isset($charname) ? $charname : 'charname_not_set' ?></strong></div>
-				<input type="hidden" name="pilot" value="<?php echo isset($charname) ? $charname : 'charname_not_set' ?>" />
-				<div class="sowerlight col-sm-12">
-					<div class="row">
-						<div class="sowerlight col-sm-4">
-							<div class="form-group">
-								<label class="control-label" for="system">System<span class="descr">Must be in format J######, where # is any number.</span></label>
-								<input type="text" tabindex="1" name="system" size="30" autoFocus="autoFocus" class="system" autocomplete="off" placeholder="J######" value="<?php echo isset($_POST['system']) ? $_POST['system']: '' ?>">
+	if (empty($successurl)): ?>
+		<form name="esrc" id="sar" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" 
+			method='post' enctype='multipart/form-data'>
+		<div class="row">
+			<div class="sechead sower col-sm-12">
+				Stranded Pilot: 
+				<strong><?php echo isset($charname) ? $charname : 'charname_not_set' ?></strong>
+				<input type="hidden" name="pilot" 
+					value="<?php echo isset($charname) ? $charname : 'charname_not_set' ?>" />
+			</div>
+			<div class="sowerlight col-sm-12">
+				<div class="row">
+					<div class="sowerlight col-sm-4">
+						<div class="form-group">
+							<label class="control-label" for="system">
+								System<span class="descr">Must be in format J######, 
+								where # is any number.</span>
+							</label>
+							<input type="text" tabindex="1" name="system" size="30" 
+								autoFocus="autoFocus" class="system" autocomplete="off" 
+								placeholder="J######" 
+								value="<?php echo isset($_POST['system']) ? $_POST['system']: '' ?>">
+						</div>
+						<div class="field">
+							<label class="control-label" for="kconnect">
+								K-space<span class="descr">What area in k-space does your 
+								wormhole connect to?</span>
+							</label>
+							<input type="text" tabindex="4" class="form-control " 
+								id="kconnect" name="kconnect" 
+								value="<?php echo isset($_POST['kconnect']) ? htmlspecialchars($_POST['kconnect']) : '' ?>" />
+						</div>
+						<div class="field">
+							<?php 
+							$checkedY = (isset($_POST['probelauncher']) && $_POST['probelauncher'] == 'Y') ? ' checked="checked"' : ''; 
+							$checkedN = (isset($_POST['probelauncher']) && $_POST['probelauncher'] == 'N') ? ' checked="checked"' : '';
+							?>
+							<label class="control-label" for="probelauncher">
+								Probe Launcher?<span class="descr">Does your ship have 
+								one fitted?</span>
+							</label>
+							<div class="radio-inline">
+								<label for="probelauncher_1">
+									<input id="probelauncher_1" tabindex="8" name="probelauncher" 
+										type="radio" value="Y"<?php echo $checkedY; ?>>Yes
+								</label>
 							</div>
-							<div class="field">
-								<label class="control-label" for="kconnect">K-space<span class="descr">What area in k-space does your wormhole connect to?</span></label>
-								<input type="text" tabindex="4" class="form-control " id="kconnect" name="kconnect" value="<?php echo isset($_POST['kconnect']) ? htmlspecialchars($_POST['kconnect']) : '' ?>" />
-							</div>
-							<div class="field">
-								<?php 
-								$checkedY = (isset($_POST['probelauncher']) && $_POST['probelauncher'] == 'Y') ? ' checked="checked"' : ''; 
-								$checkedN = (isset($_POST['probelauncher']) && $_POST['probelauncher'] == 'N') ? ' checked="checked"' : '';
-								?>
-								<label class="control-label" for="probelauncher">Probe Launcher?<span class="descr">Does your ship have one fitted?</span></label>
-								<div class="radio-inline">
-									<label for="probelauncher_1"><input id="probelauncher_1" tabindex="8" name="probelauncher" type="radio" value="Y"<?php echo $checkedY; ?>>Yes</label>
-								</div>
-								<div class="radio-inline">
-									<label for="probelauncher_2"><input id="probelauncher_2" tabindex="9" name="probelauncher" type="radio" value="N"<?php echo $checkedN; ?>>No</label>
-								</div>
+							<div class="radio-inline">
+								<label for="probelauncher_2">
+									<input id="probelauncher_2" tabindex="9" name="probelauncher" 
+										type="radio" value="N"<?php echo $checkedN; ?>>No
+								</label>
 							</div>
 						</div>
-						<div class="sowerlight col-sm-4">
-							<div class="field">
-								<label class="control-label" for="ship">Ship<span class="descr">Enter your ship type.</span></label>
-								<input type="text" tabindex="2" class="form-control " id="ship" name="ship" value="<?php echo isset($_POST['ship']) ? htmlspecialchars($_POST['ship']) : '' ?>" />
+					</div>
+					<div class="sowerlight col-sm-4">
+						<div class="field">
+							<label class="control-label" for="ship">
+								Ship<span class="descr">Enter your ship type.</span>
+							</label>
+							<input type="text" tabindex="2" class="form-control " id="ship" 
+								name="ship" 
+								value="<?php echo isset($_POST['ship']) ? htmlspecialchars($_POST['ship']) : '' ?>" />
+						</div>
+						<div class="field">
+							<label class="control-label" for="ksig">
+								K-space Connection Signature ID
+							</label>
+							<input type="text" tabindex="5" class="form-control " id="ksig" 
+								name="ksig" 
+								value="<?php echo isset($_POST['ksig']) ? htmlspecialchars($_POST['ksig']) : '' ?>" />
+						</div>
+						<div class="field">
+							<?php 
+							$checkedY = (isset($_POST['fittingsvc']) && $_POST['fittingsvc'] == 'Y') ? ' checked="checked"' : ''; 
+							$checkedN = (isset($_POST['fittingsvc']) && $_POST['fittingsvc'] == 'N') ? ' checked="checked"' : '';
+							?>
+							<label class="control-label" for="fittingsvc">
+								Fitting Service?<span class="descr">Do you have a mobile depot, 
+								or any other way to fit a probe launcher, in the wormhole with you?</span>
+							</label>
+							<div class="radio-inline">
+								<label for="fittingsvc_1">
+									<input id="fittingsvc_1" tabindex="10" name="fittingsvc" 
+										type="radio" value="Y"<?php echo $checkedY; ?>>Yes
+								</label>
 							</div>
-							<div class="field">
-								<label class="control-label" for="ksig">K-space Connection Signature ID</label>
-								<input type="text" tabindex="5" class="form-control " id="ksig" name="ksig" value="<?php echo isset($_POST['ksig']) ? htmlspecialchars($_POST['ksig']) : '' ?>" />
-							</div>
-							<div class="field">
-								<?php 
-								$checkedY = (isset($_POST['fittingsvc']) && $_POST['fittingsvc'] == 'Y') ? ' checked="checked"' : ''; 
-								$checkedN = (isset($_POST['fittingsvc']) && $_POST['fittingsvc'] == 'N') ? ' checked="checked"' : '';
-								?>
-								<label class="control-label" for="fittingsvc">Fitting Service?<span class="descr">Do you have a mobile depot, or any other way to fit a probe launcher, in the wormhole with you?</span></label>
-								<div class="radio-inline">
-									<label for="fittingsvc_1"><input id="fittingsvc_1" tabindex="10" name="fittingsvc" type="radio" value="Y"<?php echo $checkedY; ?>>Yes</label>
-								</div>
-								<div class="radio-inline">
-									<label for="fittingsvc_2"><input id="fittingsvc_2" tabindex="11" name="fittingsvc" type="radio" value="N"<?php echo $checkedN; ?>>No</label>
-								</div>
+							<div class="radio-inline">
+								<label for="fittingsvc_2">
+									<input id="fittingsvc_2" tabindex="11" name="fittingsvc" 
+										type="radio" value="N"<?php echo $checkedN; ?>>No
+								</label>
 							</div>
 						</div>
-						<div class="sowerlight col-sm-4">
-							<div class="field">
-								<label class="control-label" for="assetvalue">Asset Value<span class="descr">Approximate sell value of your ship and implants.</span></label>
-								<input type="text" tabindex="3" class="form-control " id="assetvalue" name="assetvalue" value="<?php echo isset($_POST['assetvalue']) ? htmlspecialchars($_POST['assetvalue']) : '' ?>" />
+					</div>
+					<div class="sowerlight col-sm-4">
+						<div class="field">
+							<label class="control-label" for="assetvalue">
+								Asset Value<span class="descr">Approximate sell value 
+								of your ship and implants.</span>
+							</label>
+							<input type="text" tabindex="3" class="form-control " id="assetvalue" 
+								name="assetvalue" 
+								value="<?php echo isset($_POST['assetvalue']) ? htmlspecialchars($_POST['assetvalue']) : '' ?>" />
+						</div>
+						<div class="field">
+							<?php 
+							$checkedY = (isset($_POST['ksigalive']) && $_POST['ksigalive'] == 'Y') ? ' checked="checked"' : ''; 
+							$checkedN = (isset($_POST['ksigalive']) && $_POST['ksigalive'] == 'N') ? ' checked="checked"' : '';
+							?>
+							<label class="control-label" for="ksigalive">K-space Sig Alive?</label>
+							<div class="radio-inline">
+								<label for="ksigalive_1">
+									<input id="ksigalive_1" tabindex="6" name="ksigalive" 
+										type="radio" value="Y"<?php echo $checkedY; ?>>Yes
+								</label>
 							</div>
-							<div class="field">
-								<?php 
-								$checkedY = (isset($_POST['ksigalive']) && $_POST['ksigalive'] == 'Y') ? ' checked="checked"' : ''; 
-								$checkedN = (isset($_POST['ksigalive']) && $_POST['ksigalive'] == 'N') ? ' checked="checked"' : '';
-								?>
-								<label class="control-label" for="ksigalive">K-space Sig Alive?</label>
-								<div class="radio-inline">
-									<label for="ksigalive_1"><input id="ksigalive_1" tabindex="6" name="ksigalive" type="radio" value="Y"<?php echo $checkedY; ?>>Yes</label>
-								</div>
-								<div class="radio-inline">
-									<label for="ksigalive_2"><input id="ksigalive_2" tabindex="7" name="ksigalive" type="radio" value="N"<?php echo $checkedN; ?>>No</label>
-								</div>
+							<div class="radio-inline">
+								<label for="ksigalive_2">
+									<input id="ksigalive_2" tabindex="7" name="ksigalive" 
+										type="radio" value="N"<?php echo $checkedN; ?>>No
+								</label>
 							</div>
-							<div class="field">
-								<?php 
-								$checkedY = (isset($_POST['contactothers']) && $_POST['contactothers'] == 'Y') ? ' checked="checked"' : ''; 
-								$checkedN = (isset($_POST['contactothers']) && $_POST['contactothers'] == 'N') ? ' checked="checked"' : '';
-								?>
-								<label class="control-label" for="contactothers">Contacted Others?<span class="descr">Have you made contact with others in the wormhole?</span></label>
-								<div class="radio-inline">
-									<label for="contactothers_1"><input id="contactothers_1" tabindex="12" name="contactothers" type="radio" value="Y"<?php echo $checkedY; ?>>Yes</label>
-								</div>
-								<div class="radio-inline">
-									<label for="contactothers_2"><input id="contactothers_2" tabindex="13" name="contactothers" type="radio" value="N"<?php echo $checkedN; ?>>No</label>
-								</div>
+						</div>
+						<div class="field">
+							<?php 
+							$checkedY = (isset($_POST['contactothers']) && $_POST['contactothers'] == 'Y') ? ' checked="checked"' : ''; 
+							$checkedN = (isset($_POST['contactothers']) && $_POST['contactothers'] == 'N') ? ' checked="checked"' : '';
+							?>
+							<label class="control-label" for="contactothers">
+								Contacted Others?<span class="descr">Have you made contact with 
+								others in the wormhole?</span>
+							</label>
+							<div class="radio-inline">
+								<label for="contactothers_1">
+									<input id="contactothers_1" tabindex="12" name="contactothers" 
+										type="radio" value="Y"<?php echo $checkedY; ?>>Yes
+								</label>
+							</div>
+							<div class="radio-inline">
+								<label for="contactothers_2">
+									<input id="contactothers_2" tabindex="13" name="contactothers" 
+										type="radio" value="N"<?php echo $checkedN; ?>>No
+								</label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12"  style="padding-top: 10px;">
-			<label class="control-label white" for="notes">Notes<span class="descr white">Is there any other important information we need to know?</span></label>
-			<textarea class="form-control" id="notes" tabindex="14" name="notes" rows="3"><?php echo isset($_POST['notes']) ? htmlspecialchars($_POST['notes']) : '' ?></textarea>
-		</div>
-		<div class="form-actions col-sm-12" style="padding-top: 10px;">
-		    <button type="submit" class="btn btn-lg" tabindex="15">Submit</button>
+		<div class="row">
+			<div class="col-sm-12"  style="padding-top: 10px;">
+				<label class="control-label white" for="notes">
+					Notes<span class="descr white">Is there any other important information 
+					we need to know in order to serve you better?</span>
+				</label>
+				<textarea class="form-control" id="notes" tabindex="14" name="notes" rows="3">
+					<?php echo isset($_POST['notes']) ? htmlspecialchars($_POST['notes']) : '' ?>
+				</textarea>
+			</div>
+			<div class="form-actions col-sm-12" style="padding-top: 10px;">
+			    <button type="submit" class="btn btn-lg" tabindex="15">Submit</button>
+			</div>
 		</div>
 		</form>
-	</div>
 	<?php 
-	endif;
-	?>
+	endif; ?>
 </div>
 </body>
 </html>
